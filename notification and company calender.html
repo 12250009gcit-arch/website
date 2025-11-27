@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Calendar & Notification Center</title>
+
+    <!-- FIX 1: Added Bootstrap CSS for classes like 'shadow-lg', 'bg-white', 'p-4', etc. -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" xintegrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- FIX 2: Added Bootstrap Icons CSS for icons like 'bi bi-house-door-fill', etc. -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        /* General Setup */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f9;
+            margin: 0;
+            padding: 0;
+            /* FIX 3: Removed display: flex; from body because sidebar is fixed */
+        }
+
+        /* Container for Max Width, Shadow, and Border Radius */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            /* Added margin-bottom for spacing before the footer */
+            margin-bottom: 20px; 
+        }
+
+        /* Header */
+        .header {
+            background-color: #1a4f8d; /* Deep Blue */
+            color: white;
+            padding: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2em;
+        }
+
+        .header p {
+            margin-top: 5px;
+            font-size: 0.9em;
+            color: #ccc;
+        }
+        
+        /* Main Content Flex Area (Calendar + Notifications) */
+        .content-flex-area {
+            display: flex; /* Enables side-by-side layout */
+            padding: 30px;
+            gap: 30px;
+        }
+
+        .calendar-section {
+            flex: 2; /* Takes 2/3 of space on desktop */
+            min-width: 300px;
+        }
+
+        .notification-section {
+            flex: 1; /* Takes 1/3 of space on desktop */
+            min-width: 250px;
+        }
+
+        /* Section Titles */
+        .section-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #1a4f8d;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* Card Styles */
+        .card {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            border: 1px solid #e0e0e0;
+        }
+
+        /* Event Item Styles */
+        .event-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            transition: background-color 0.2s;
+            cursor: pointer;
+        }
+        
+        .event-item:hover {
+            background-color: #f0f0f0;
+        }
+
+        .event-date {
+            width: 50px;
+            height: 50px;
+            background-color: #1a4f8d; /* Primary Blue */
+            color: white;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-right: 15px;
+        }
+
+        .event-date span:first-child {
+            font-size: 0.8em;
+            line-height: 1;
+        }
+
+        .event-date.holiday {
+            background-color: #d9534f; /* Red for Holiday */
+        }
+        .event-date.deadline {
+            background-color: #f0ad4e; /* Orange for Deadline */
+        }
+
+        .event-details p {
+            margin: 0;
+        }
+
+        .event-details .title {
+            font-weight: 600;
+            color: #333;
+            font-size: 1.1em;
+        }
+
+        .event-details .info {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 3px;
+        }
+
+        /* New Footer */
+        .ice-mountain-footer {
+            /* Subtle blue gradient representing ice and sky */
+            background: linear-gradient(90deg, #31cde1, #3486eb, #2065dc); /* Light cyan to cooler blue */
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem 1rem;
+            color: #f2f3f3; /* Deep blue text color */
+            font-weight: 500;
+        }
+
+
+        /* Notification Item Styles */
+        .notification-item {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 5px solid;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+        }
+
+        .notification-item.priority {
+            background-color: #f2dede;
+            border-color: #a94442; /* Red */
+        }
+
+        .notification-item.update {
+            background-color: #d9edf7;
+            border-color: #31708f; /* Blue */
+        }
+
+        .notification-item.general {
+            background-color: #f9f9f9;
+            border-color: #ccc; /* Gray */
+        }
+
+        .notification-item .category {
+            font-size: 0.75em;
+            font-weight: bold;
+            color: #777;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .notification-item .message {
+            font-weight: 500;
+            color: #333;
+            line-height: 1.4;
+        }
+
+        .notification-item .time {
+            font-size: 0.7em;
+            color: #999;
+            margin-top: 5px;
+            display: block;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 900px) {
+            .content-flex-area {
+                flex-direction: column;
+                padding: 20px;
+            }
+            .header {
+                padding: 20px;
+            }
+        }
+        
+        /* Utility for Icons (using emojis as simple replacements for external icons) */
+        .icon-text {
+            margin-right: 8px;
+        }
+        
+        /* Sidebar Styling */
+        .sidebar {
+            width: 250px;
+            position: fixed;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        /* Active Nav Item Styling */
+        .nav-item.active-link {
+            background-color: #2ECC71;
+            color: white !important;
+            border-radius: 0.5rem;
+        }
+
+        .nav-item.active-link:hover {
+            background-color: #28a745; /* Slightly darker green on hover for active link */
+            color: white !important;
+        }
+
+        /* Navigation Link Hover Style */
+        .nav-item:hover, .nav-item:focus {
+            background-color: #e9ecef; /* Light grey on hover */
+            color: #2ECC71 !important;
+        }
+
+        /* FIX 4: Wrapper for the main content area to clear the fixed sidebar */
+        .content-area-offset {
+            margin-left: 250px; /* Offset the main content by the sidebar width */
+            width: auto;
+            min-height: 100vh;
+            display: flex; /* Make it a flex column to push the footer to the bottom */
+            flex-direction: column;
+        }
+
+        /* Custom Green Color based on screenshot */
+        .im-green-bg {
+            background-color: #2ECC71 !important;
+        }
+
+        /* Responsive adjustment for small screens (sidebar hidden) */
+        @media (max-width: 992px) {
+            .sidebar {
+                display: none;
+            }
+            .content-area-offset { /* Reset offset when sidebar is hidden */
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. LEFT SIDEBAR (NAV BAR) -->
+    <aside class="sidebar bg-white shadow-lg border-end">
+
+        <!-- Sidebar Header: IM System Title Block (Green) -->
+        <div class="im-green-bg text-white p-4 rounded-bottom-4 mb-4">
+            <h1 class="h3 fw-bold mb-0">IM System</h1>
+            <p class="small opacity-75 mb-0">Information Management</p>
+        </div>
+
+        <!-- User/Profile Info -->
+        <div class="px-4 pb-3 border-bottom">
+            <p class="text-uppercase text-muted fw-semibold small mb-1">USER</p>
+            <div class="text-dark fw-bold h5 mb-0">Tashi Wangchuk</div>
+            <div class="small text-secondary">Operations Manager</div>
+        </div>
+
+        <!-- Navigation Links -->
+        <nav class="p-3">
+            <ul class="list-group list-group-flush border-0">
+                
+                <!-- 1. Home (Active Link) -->
+                <li class="list-group-item border-0 p-0 mb-2">
+                    <a href="home.html" class="nav-item active-link d-flex align-items-center p-3 fw-medium text-decoration-none">
+                        <i class="bi bi-house-door-fill me-3 fs-5"></i>
+                        <span>Home</span>
+                    </a>
+                </li>
+
+                <!-- 2. Profile -->
+                <li class="list-group-item border-0 p-0 mb-2">
+                    <a href="profile.html" class="nav-item d-flex align-items-center p-3 text-secondary text-decoration-none rounded-3">
+                        <i class="bi bi-person me-3 fs-5"></i>
+                        <span>Profile</span>
+                    </a>
+                </li>
+                
+                <!-- 3. Publication -->
+                <li class="list-group-item border-0 p-0 mb-2">
+                    <a href="Publication.html" class="nav-item d-flex align-items-center p-3 text-secondary text-decoration-none rounded-3">
+                        <i class="bi bi-book me-3 fs-5"></i>
+                        <span>Publication</span>
+                    </a>
+                </li>
+
+                <!-- 4. Inventory & Property -->
+                <li class="list-group-item border-0 p-0 mb-2">
+                    <a href="Inventory.html" class="nav-item d-flex align-items-center p-3 text-secondary text-decoration-none rounded-3">
+                        <i class="bi bi-box-seam me-3 fs-5"></i>
+                        <span>Inventory & Property</span>
+                    </a>
+                </li>
+                
+                <!-- 5. Staff Tasks & Tours -->
+                <li class="list-group-item border-0 p-0 mb-2">
+                    <a href="Staff Task and Tour.html" class="nav-item d-flex align-items-center p-3 text-secondary text-decoration-none rounded-3">
+                        <i class="bi bi-card-checklist me-3 fs-5"></i>
+                        <span>Staff Tasks & Tours</span>
+                    </a>
+                </li>
+                
+                <!-- 6. Leave Application -->
+                <li class="list-group-item border-0 p-0 mb-2">
+                    <a href="Leave Application Form.html" class="nav-item d-flex align-items-center p-3 text-secondary text-decoration-none rounded-3">
+                        <i class="bi bi-calendar-minus me-3 fs-5"></i>
+                        <span>Leave Application</span>
+                    </a>
+                </li>
+                
+                <!-- 7. Promotion and Resignation -->
+                <li class="list-group-item border-0 p-0 mb-2">
+                    <a href="promotion and resignation.html" class="nav-item d-flex align-items-center p-3 text-secondary text-decoration-none rounded-3">
+                        <i class="bi bi-person-up me-3 fs-5"></i>
+                        <span>Promotion and Resignation</span>
+                    </a>
+                </li>
+                
+                <!-- 8. Human Resource and Help -->
+                <li class="list-group-item border-0 p-0 mb-2">
+                    <a href="Human Resouce and Help.html" class="nav-item d-flex align-items-center p-3 text-secondary text-decoration-none rounded-3">
+                        <i class="bi bi-person-workspace me-3 fs-5"></i>
+                        <span>Human Resource and Help</span>
+                    </a>
+                </li>
+                
+                <!-- 9. Notification and Company Calendar -->
+                <li class="list-group-item border-0 p-0 mb-2">
+                    <a href="Notification and Company Calender.html" class="nav-item d-flex align-items-center p-3 text-secondary text-decoration-none rounded-3">
+                        <i class="bi bi-bell-fill me-3 fs-5"></i>
+                        <span>Notification and Company Calendar</span>
+                    </a>
+                </li>
+                
+                <!-- 10. Rules and Regulations -->
+                <li class="list-group-item border-0 p-0 mb-2">
+                    <a href="Rules and Regulations.html" class="nav-item d-flex align-items-center p-3 text-secondary text-decoration-none rounded-3">
+                        <i class="bi bi-rulers me-3 fs-5"></i>
+                        <span>Rules and Regulations</span>
+                    </a>
+                </li>
+                
+                <!-- 11. Change password -->
+                <li class="list-group-item border-0 p-0 mb-2">
+                    <a href="Change Password.html" class="nav-item d-flex align-items-center p-3 text-secondary text-decoration-none rounded-3">
+                        <i class="bi bi-shield-lock-fill me-3 fs-5"></i>
+                        <span>Change password</span>
+                    </a>
+                </li>
+                
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- FIX 5: Use a dedicated wrapper for content offset and vertical flex -->
+    <div class="content-area-offset">
+        
+        <!-- FIX 6: Use the defined .container class for max-width and background/shadow -->
+        <div class="container">
+            
+            <!-- Header Section -->
+            <div class="header">
+                <div>
+                    <h1>Company Hub</h1>
+                    <p>All current announcements and upcoming events.</p>
+                </div>
+                <!-- Simple Emojis for "Icons" -->
+                <div style="font-size: 1.5em;">
+                    🔔 📅
+                </div>
+            </div>
+
+            <!-- FIX 7: Main Content Area (Calendar + Notifications) - Use .content-flex-area for internal flex layout -->
+            <div class="content-flex-area">
+
+                <!-- 1. Company Calendar & Upcoming Events -->
+                <div class="calendar-section">
+                    <h2 class="section-title">📅 Upcoming Events & Deadlines</h2>
+
+                    <div class="card">
+                        <h3 style="font-size: 1.2em; font-weight: 600; margin-bottom: 20px;">November 2025 - December 2025</h3>
+                        
+                        <div class="events-list">
+                            
+                            <!-- Event 1: Holiday -->
+                            <div class="event-item" style="background-color: #fef0f0;">
+                                <div class="event-date holiday">
+                                    <span>28</span>
+                                    <span>NOV</span>
+                                </div>
+                                <div class="event-details">
+                                    <p class="title" style="color: #a94442;">Annual Company Holiday</p>
+                                    <p class="info">
+                                        <span class="icon-text">💼</span> Company-wide day off.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Event 2: Town Hall -->
+                            <div class="event-item">
+                                <div class="event-date">
+                                    <span>15</span>
+                                    <span>DEC</span>
+                                </div>
+                                <div class="event-details">
+                                    <p class="title" style="color: #1a4f8d;">Q4 Global Town Hall Meeting</p>
+                                    <p class="info">
+                                        <span class="icon-text">👥</span> 10:00 AM - 11:30 AM (All-Hands required)
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <!-- Event 3: Deadline -->
+                            <div class="event-item" style="background-color: #fef9ed;">
+                                <div class="event-date deadline">
+                                    <span>31</span>
+                                    <span>DEC</span>
+                                </div>
+                                <div class="event-details">
+                                    <p class="title" style="color: #8a6d3b;">Expense Report Deadline</p>
+                                    <p class="info">
+                                        <span class="icon-text">💵</span> All Q4 expenses must be submitted by midnight.
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Call to Action Link -->
+                    <div style="text-align: center; margin-top: 15px;">
+                        <a href="#" style="color: #1a4f8d; text-decoration: none; font-weight: bold;">
+                            + Propose a New Company Event
+                        </a>
+                    </div>
+
+                </div>
+
+                <!-- 2. Notification Feed -->
+                <div class="notification-section">
+                    <h2 class="section-title">🔔 Notification Feed</h2>
+
+                    <div class="notifications-list">
+                        
+                        <!-- High Priority Announcement -->
+                        <div class="notification-item priority">
+                            <p class="category" style="color: #a94442;">🚨 HIGH PRIORITY</p>
+                            <p class="message">Security Update Mandatory</p>
+                            <p class="info">All employees must update their VPN client by EOD today.</p>
+                            <span class="time">1 hour ago</span>
+                        </div>
+
+                        <!-- Standard Announcement -->
+                        <div class="notification-item update">
+                            <p class="category" style="color: #31708f;">ℹ️ UPDATE</p>
+                            <p class="message">New Office Coffee Machine</p>
+                            <p class="info">The new espresso machine is installed on the 3rd floor.</p>
+                            <span class="time">Yesterday</span>
+                        </div>
+
+                        <!-- General Update -->
+                        <div class="notification-item general">
+                            <p class="category" style="color: #666;">📝 GENERAL</p>
+                            <p class="message">HR Policy Handbook Revision</p>
+                            <p class="info">The 2025 Employee Handbook is now available on the internal drive.</p>
+                            <span class="time">3 days ago</span>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 15px;">
+                        <a href="#" style="color: #666; text-decoration: none; font-size: 0.9em;">
+                            View All Past Announcements
+                        </a>
+                    </div>
+                </div>
+                
+            </div>
+            
+        </div>
+        
+        <!-- Footer with Blue Blend Color (Ice Mountain) -->
+        <!-- Footer is outside the inner .container to allow it to span the full width of the .content-area-offset -->
+        <footer class="ice-mountain-footer mt-10">
+            <div class="container mx-auto text-center">
+                <!-- Removed unnecessary Bootstrap grid classes from here -->
+                <p class="mb-0">IM System &copy; 2024. All Rights Reserved. Built with <i class="bi bi-heart-fill text-red-500"></i> in Bhutan.</p>
+                <p class="text-sm opacity-80 mt-1">Staff ID: <span id="footerStaffId">Loading...</span></p>
+            </div>
+        </footer>
+
+    </div>
+    
+    <!-- FIX 8: Added Bootstrap JS at the end of the body -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+</body>
+</html>
