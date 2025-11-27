@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IM System Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --im-green: #2ECC71;
+            --main-bg: #f0f4f8;
+            --card-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--main-bg); 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .login-container {
+            max-width: 400px;
+            width: 90%;
+            background-color: white;
+            /* We use padding here but then use negative margin on the header 
+               to make it span the full width and override the top radius. */
+            padding: 2rem; 
+            border-radius: 1rem; /* Apply overall radius */
+            box-shadow: var(--card-shadow);
+            text-align: center;
+            /* Hide overflow so the negative margins don't cause horizontal scrolling */
+            overflow: hidden; 
+        }
+        .btn-im {
+            background-color: var(--im-green);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.2s;
+        }
+        .btn-im:hover {
+            background-color: #27AE60;
+            color: white;
+        }
+        .form-control {
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+        }
+        /* Style for the green header container */
+        .green-header {
+            background-color: var(--im-green);
+            color: white;
+            /* Use negative margins to span the width of the parent (login-container) 
+               by offsetting its padding (2rem or 8 units in Tailwind) */
+            margin: -2rem -2rem 0 -2rem; 
+            padding: 2rem 1rem; /* Adjust padding inside the green box */
+            /* Round only the top corners */
+            border-top-left-radius: 1rem;
+            border-top-right-radius: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Direct Login Form Container -->
+    <div class="login-container">
+        
+        <!-- NEW GREEN HEADER SECTION -->
+        <div class="green-header">
+            <h1 class="text-4xl font-bold mb-0">IM System</h1>
+            <p class="mb-0 text-lg opacity-90">Staff Portal Access</p>
+        </div>
+        <!-- END NEW GREEN HEADER SECTION -->
+
+        <!-- Login Form starts here on the white background -->
+        <div id="loginForm" class="pt-8"> 
+            <div id="authError" class="alert alert-danger d-none" role="alert"></div>
+            
+            <div class="mb-4 text-start">
+              <!-- Staff Name (User ID) - Pre-filled and Visible -->
+              <label for="staffNameInput" class="form-label fw-medium text-gray-700">Staff Name</label>
+              <input type="text" class="form-control" id="staffNameInput" value="bhutanese" readonly>
+            </div>
+            
+            <div class="mb-5 text-start">
+              <!-- Password - Pre-filled and Visible (type="text") -->
+              <label for="passwordInput" class="form-label fw-medium text-gray-700">Password</label>
+              <input type="text" class="form-control" id="passwordInput" value="password123">
+            </div>
+          
+            <!-- Sign In Button -->
+            <button type="button" class="btn btn-im w-full fw-bold" onclick="handleLogin()">
+                <i class="bi bi-box-arrow-in-right me-2"></i> Access Staff Profile
+            </button>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Default Credentials
+        const DEFAULT_STAFF_NAME = 'bhutanese';
+        const DEFAULT_PASSWORD = 'password123';
+        // Display Name for Home/Profile Page
+        const DISPLAY_NAME = 'Tashi Wangchuk'; 
+
+        function handleLogin() {
+            const staffName = document.getElementById('staffNameInput').value;
+            const password = document.getElementById('passwordInput').value;
+            const errorElement = document.getElementById('authError');
+
+            errorElement.classList.add('d-none');
+
+            // --- Authentication Logic ---
+            // Note: Since the fields are pre-filled and readonly/pre-set, this should always succeed unless the user manually changes the visible password.
+            if (staffName === DEFAULT_STAFF_NAME && password === DEFAULT_PASSWORD) {
+                // Success: Store info and redirect
+                sessionStorage.setItem('loggedInEmployeeName', DISPLAY_NAME); // Store Bhutanese name for display
+                sessionStorage.setItem('loggedInStaffId', staffName); // Store ID for logic
+                
+                window.location.href = 'home.html';
+                
+            } else {
+                // Failure: Show error message
+                errorElement.textContent = 'Invalid Staff Name or Password.';
+                errorElement.classList.remove('d-none');
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check if already logged in and redirect to home if true
+            if (sessionStorage.getItem('loggedInStaffId')) {
+                window.location.href = 'home.html';
+            }
+        });
+    </script>
+</body>
+</html>
