@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive Corporate Profile - IM System</title>
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 CSS (Structural components only) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <style>
+        /* --- Custom Variables & Global Styles (Pure CSS) --- */
+        :root {
+            --im-green: #2ECC71;
+            --im-dark-green: #27AE60;
+            --beach-orange: #FF5733;
+            --main-bg: #f0f4f8;
+            --card-radius: 1rem;
+            --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--main-bg); 
+        }
+        
+        /* Utility Class for Green Text */
+        .im-green-text {
+            color: var(--im-green) !important;
+        }
+
+        /* Navigation Bar Styling */
+        .navbar-main {
+            background-color: var(--im-green) !important;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+        }
+        .nav-link.active {
+            font-weight: 600;
+        }
+
+        /* Section Headings */
+        .section-heading {
+            font-weight: 700; 
+            color: var(--im-dark-green); /* Changed to dark green for better contrast against background */
+            margin-bottom: 1rem; 
+            margin-top: 1.5rem;
+        }
+        
+        /* Dashboard Layout */
+        .dashboard-container { 
+            padding-top: 2rem; 
+            padding-bottom: 2rem; 
+        }
+        
+        /* General Card Styling */
+        .card {
+            border-radius: var(--card-radius);
+            border: none;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 1.5rem;
+        }
+        .card-header {
+            border-radius: var(--card-radius) var(--card-radius) 0 0 !important;
+            border-bottom: 1px solid #eee;
+        }
+
+        /* Employee Profile Card */
+        .profile-card .card-header {
+            /* Using a slightly darker gradient for better text visibility */
+            background: linear-gradient(135deg, #FF9900, var(--beach-orange)); 
+            padding: 1.5rem;
+            color: white;
+            text-align: center;
+        }
+        .profile-card .card-body {
+            padding: 1.5rem;
+        }
+        .profile-card h6 {
+            font-weight: 700;
+            color: var(--im-dark-green);
+            margin-bottom: 1rem;
+        }
+
+        /* Profile Photo */
+        .profile-img-container {
+            width: 90px; height: 90px; border-radius: 50%;
+            border: 4px solid white; background-color: var(--main-bg);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2rem; margin: 0 auto 10px auto;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Organization Stats boxes */
+        .stat-box {
+            background-color: white;
+            padding: 1.5rem; 
+            border-radius: 0.75rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid var(--im-green);
+            transition: transform 0.2s;
+        }
+        .stat-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+        .stat-box h2 {
+            font-weight: 700;
+            color: var(--im-green);
+        }
+        
+        /* Leader Card Styling */
+        .leader-card { 
+            text-align: center; 
+            padding: 1rem; 
+            transition: background-color 0.3s;
+        }
+        .leader-card:hover {
+            background-color: #f7f7f7;
+        }
+        .leader-card h6 {
+            font-weight: 700;
+            margin-bottom: 0;
+        }
+        .leader-img {
+            width: 70px; height: 70px; border-radius: 50%;
+            margin: 0 auto 10px auto; display: flex;
+            align-items: center; justify-content: center; font-size: 1.5rem;
+            background-color: var(--im-dark-green); 
+            color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+         /* New Footer */
+        .ice-mountain-footer {
+            /* Subtle blue gradient representing ice and sky */
+            background: linear-gradient(90deg, #31cde1, #3486eb, #2065dc); /* Light cyan to cooler blue */
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem 1rem;
+            color: #f2f3f3; /* Deep blue text color */
+            font-weight: 500;
+        }
+
+        /* Sidebar Styling */
+.sidebar {
+    width: 250px;
+    position: fixed;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+/* Active Nav Item Styling */
+.nav-item.active-link {
+    background-color: #2ECC71;
+    color: white !important;
+    border-radius: 0.5rem;
+}
+
+.nav-item.active-link:hover {
+    background-color: #28a745; /* Slightly darker green on hover for active link */
+    color: white !important;
+}
+
+/* Navigation Link Hover Style */
+.nav-item:hover, .nav-item:focus {
+    background-color: #e9ecef; /* Light grey on hover */
+    color: #2ECC71 !important;
+}
+
+/* Main Content Adjustment for Fixed Sidebar */
+.main-content {
+    margin-left: 250px; /* Offset the main content by the sidebar width */
+    padding-top: 0;
+}
+
+/* Responsive adjustment for small screens (sidebar hidden) */
+@media (max-width: 992px) {
+    .sidebar {
+        display: none;
+    }
+    .main-content {
+        margin-left: 0;
+    }
+}
+
+/* Custom Green Color based on screenshot */
+.im-green-bg {
+    background-color: #2ECC71 !important;
+}
+
+
+
+        /* Style adjustments for the CEO (first leader card) */
+        .col-lg-3:nth-child(2) .leader-card .leader-img { /* nth-child(2) because it's the second child in the row div */
+            background-color: var(--beach-orange);
+        }
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .profile-card .card-header {
+                border-radius: var(--card-radius) var(--card-radius) 0 0 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    
+    <!-- 1. LEFT SIDEBAR (NAV BAR) -->
+    <aside class="sidebar bg-white shadow-lg border-end">
+
+        <!-- Sidebar Header: IM System Title Block (Green) -->
+        <div class="im-green-bg text-white p-4 rounded-bottom-4 mb-4">
+            <h1 class="h3 fw-bold mb-0">IM System</h1>
+            <p class="small opacity-75 mb-0">Information Management</p>
+        </div>
+
+        <!-- User/Profile Info -->
+        <div class="px-4 pb-3 border-bottom">
+            <p class="text-uppercase text-muted fw-semibold small mb-1">USER</p>
+            <div class="text-dark fw-bold h5 mb-0">Tashi Wangchuk</div>
+            <div class="small text-secondary">Operations Manager</div>
+        </div>
+
+        <!-- Navigation Links -->
+        <nav class="p-3">
+            <ul class="list-group list-group-flush border-0">
+                
+                <!-- 1. Home (Active Link) -->
+                <li class="list-group-item border-0 p-0 mb-2">
+                    <a href="home.html" class="nav-item active-link d-flex align-items-center p-3 fw-medium text-decoration-none">
+                        <i class="bi bi-house-door-fill me-3 fs-5"></i>
+                        <span>Home</span>
+                    </a>
+                </li>
+
+                <!-- 2. Profile -->
+                <li class="list-group-item border-0 p-0 mb-2">
+                    <a href="profile.html" class="nav-item d-flex align-items-center p-3 text-secondary text-decoration-none rounded-3">
+                        <i class="bi bi-person me-3 fs-5"></i>
+                        <span>Profile</span>
+                    </a>
+                </li>
+                
+                <!-- 3. Publication -->
+                <li class="list-group-item border-0 p-0 mb-2">
+                    <a href="Publication.html" class="nav-item d-flex align-items-center p-3 text-secondary text-decoration-none rounded-3">
+                        <i class="bi bi-book me-3 fs-5"></i>
+                        <span>Publication</span>
+                    </a>
+                </li>
+
+                <!-- 4. Inventory & Property -->
+                <li class="list-group-item border-0 p-0 mb-2">
+                    <a href="Inventory.html" class="nav-item d-flex align-items-center p-3 text-secondary text-decoration-none rounded-3">
+                        <i class="bi bi-box-seam me-3 fs-5"></i>
+                        <span>Inventory & Property</span>
+                    </a>
+                </li>
+                
+                <!-- 5. Staff Tasks & Tours -->
+                <li class="list-group-item border-0 p-0 mb-2">
+                    <a href="Staff Task and Tour.html" class="nav-item d-flex align-items-center p-3 text-secondary text-decoration-none rounded-3">
+                        <i class="bi bi-card-checklist me-3 fs-5"></i>
+                        <span>Staff Tasks & Tours</span>
+                    </a>
+                </li>
+                
+                <!-- 6. Leave Application -->
+                <li class="list-group-item border-0 p-0 mb-2">
+                    <a href="Leave Application Form.html" class="nav-item d-flex align-items-center p-3 text-secondary text-decoration-none rounded-3">
+                        <i class="bi bi-calendar-minus me-3 fs-5"></i>
+                        <span>Leave Application</span>
+                    </a>
+                </li>
+                
+                <!-- 7. Promotion and Resignation -->
+                <li class="list-group-item border-0 p-0 mb-2">
+                    <a href="promotion and resignation.html" class="nav-item d-flex align-items-center p-3 text-secondary text-decoration-none rounded-3">
+                        <i class="bi bi-person-up me-3 fs-5"></i>
+                        <span>Promotion and Resignation</span>
+                    </a>
+                </li>
+                
+                <!-- 8. Human Resource and Help -->
+                <li class="list-group-item border-0 p-0 mb-2">
+                    <a href="Human Resouce and Help.html" class="nav-item d-flex align-items-center p-3 text-secondary text-decoration-none rounded-3">
+                        <i class="bi bi-person-workspace me-3 fs-5"></i>
+                        <span>Human Resource and Help</span>
+                    </a>
+                </li>
+                
+                <!-- 9. Notification and Company Calendar -->
+                <li class="list-group-item border-0 p-0 mb-2">
+                    <a href="Notification and Company Calender.html" class="nav-item d-flex align-items-center p-3 text-secondary text-decoration-none rounded-3">
+                        <i class="bi bi-bell-fill me-3 fs-5"></i>
+                        <span>Notification and Company Calendar</span>
+                    </a>
+                </li>
+                
+                <!-- 10. Rules and Regulations -->
+                <li class="list-group-item border-0 p-0 mb-2">
+                    <a href="Rules and Regulations.html" class="nav-item d-flex align-items-center p-3 text-secondary text-decoration-none rounded-3">
+                        <i class="bi bi-rulers me-3 fs-5"></i>
+                        <span>Rules and Regulations</span>
+                    </a>
+                </li>
+                
+                <!-- 11. Change password -->
+                <li class="list-group-item border-0 p-0 mb-2">
+                    <a href="Change Password.html" class="nav-item d-flex align-items-center p-3 text-secondary text-decoration-none rounded-3">
+                        <i class="bi bi-shield-lock-fill me-3 fs-5"></i>
+                        <span>Change password</span>
+                    </a>
+                </li>
+                
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Top Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-main">
+        <div >
+            <h4>Company Pofile</h4>
+        </div>
+       
+    </nav>
+
+<div class="main-content">
+
+    <!-- Main Content Container (Structural Bootstrap Grid) -->
+    <div class="container dashboard-container">
+        
+        <!-- Section 1: Organization Overview -->
+        <div class="row">
+            <div class="col-12">
+                <h4 class="section-heading"><i class="bi bi-building me-2"></i>Company Overview</h4>
+            </div>
+
+            <div class="col-md-4 col-sm-6 mb-4">
+                <div class="stat-box"><h2>1,540</h2><p class="text-muted mb-0">Total Employees Globally</p></div>
+            </div>
+            
+            <div class="col-md-4 col-sm-6 mb-4">
+                <div class="stat-box"><h2>4.2 Yrs</h2><p class="text-muted mb-0">Average Employee Tenure</p></div>
+            </div>
+
+            <div class="col-md-4 col-sm-12 mb-4">
+                <div class="stat-box"><h2><i class="bi bi-geo-alt"></i> HQ</h2><p class="text-muted mb-0">New York, Development Center</p></div>
+            </div>
+        </div>
+
+        <!-- Section 2: Leadership Team -->
+        <div class="row">
+            <div class="col-12">
+                <h4 class="section-heading"><i class="bi bi-person-badge-fill me-2"></i>Leadership Panel</h4>
+            </div>
+            <!-- The Leadership Cards are inside this row -->
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card leader-card">
+                    <div class="leader-img beach-accent-bg text-white"><i class="bi bi-star-fill"></i></div>
+                    <h6>John Smith</h6>
+                    <p class="small text-muted mb-0">Chief Executive Officer (CEO)</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card leader-card">
+                    <div class="leader-img"><i class="bi bi-person-lines-fill"></i></div>
+                    <h6>Alicia Gomez</h6>
+                    <p class="small text-muted mb-0">Chief Technology Officer (CTO)</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card leader-card">
+                    <div class="leader-img"><i class="bi bi-cash-stack"></i></div>
+                    <h6>David Lee</h6>
+                    <p class="small text-muted mb-0">Chief Financial Officer (CFO)</p>
+                </div>
+            </div>
+             <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card leader-card">
+                    <div class="leader-img"><i class="bi bi-people-fill"></i></div>
+                    <h6>Sarah Chen</h6>
+                    <p class="small text-muted mb-0">VP of HR</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: Current Employee's Detailed Profile (Dynamic) -->
+        <div class="row">
+            <div class="col-12">
+                <h4 class="section-heading"><i class="bi bi-person-fill me-2"></i>Current User Detailed Profile</h4>
+            </div>
+            
+            <!-- Employee Quick Info Card -->
+            <div class="col-lg-12"> 
+                <div class="card profile-card">
+                    <div class="row g-0">
+                        <!-- Left side: Photo and Name/Title -->
+                        <div class="col-md-4">
+                            <div class="card-header h-100 d-flex flex-column justify-content-center">
+                                <div class="profile-img-container"><i class="bi bi-person-check-fill text-secondary"></i></div>
+                                <h4 class="text-white fw-bold mb-0" id="employeeName">Loading Name...</h4>
+                                <p class="small text-white-50 mb-0" id="employeeTitle"></p>
+                            </div>
+                        </div>
+                        <!-- Right side: Details and Actions -->
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h6>Key Details</h6>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <ul class="list-unstyled small">
+                                            <li class="mb-2"><i class="bi bi-envelope-fill im-green-text me-2"></i>Email: <span id="employeeEmail" class="fw-bold"></span></li>
+                                            <li class="mb-2"><i class="bi bi-phone-fill im-green-text me-2"></i>Phone: <span id="employeePhone"></span></li>
+                                            <li class="mb-2"><i class="bi bi-calendar-date-fill im-green-text me-2"></i>Start Date: <span id="employeeStart"></span></li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <ul class="list-unstyled small">
+                                            <li class="mb-2"><i class="bi bi-people-fill im-green-text me-2"></i>Team: <span id="employeeTeam"></span></li>
+                                            <li class="mb-2"><i class="bi bi-person-rolodex im-green-text me-2"></i>Reports to: <span class="fw-bold" id="employeeManager"></span></li>
+                                            <li class="mb-2"><i class="bi bi-clock-fill im-green-text me-2"></i>Employment Type: <span id="employeeType"></span></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <hr>
+                                <a href="#" class="btn btn-sm btn-outline-secondary rounded-pill">
+                                    <i class="bi bi-chat-dots me-1"></i> Contact Manager
+                                </a>
+                                <a href="#" class="btn btn-sm btn-outline-primary rounded-pill ms-2">
+                                    <i class="bi bi-pencil-square me-1"></i> Update Info
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JavaScript for Profile Loading and Logout -->
+    <script>
+        // Mock data for the current user's profile
+        const employeeData = {
+            name: "Alex Johnson",
+            title: "Senior Product Manager",
+            email: "alex.j@imsystem.com",
+            phone: "+1 (555) 890-1234",
+            start_date: "2020-05-15",
+            team: "Innovation & Strategy",
+            manager: "Alicia Gomez (CTO)",
+            type: "Full-Time (Remote)"
+        };
+
+        /**
+         * Populates the profile card fields with data.
+         */
+        function loadProfileData() {
+            try {
+                document.getElementById('employeeName').textContent = employeeData.name;
+                document.getElementById('employeeTitle').textContent = employeeData.title;
+                document.getElementById('employeeEmail').textContent = employeeData.email;
+                document.getElementById('employeePhone').textContent = employeeData.phone;
+                document.getElementById('employeeStart').textContent = employeeData.start_date;
+                document.getElementById('employeeTeam').textContent = employeeData.team;
+                document.getElementById('employeeManager').textContent = employeeData.manager;
+                document.getElementById('employeeType').textContent = employeeData.type;
+            } catch (error) {
+                console.error("Error loading profile data:", error);
+                // Fallback message display in case of error
+                document.getElementById('employeeName').textContent = "Data Error";
+            }
+        }
+
+        /**
+         * Handles the sign out process (currently mocked).
+         */
+        function handleSignOut(event) {
+            event.preventDefault();
+            const navbar = document.querySelector('.navbar-main');
+            const container = document.querySelector('.dashboard-container');
+            
+            // Simple visual feedback for logout
+            navbar.style.backgroundColor = 'var(--beach-orange)';
+            container.innerHTML = `
+                <div class="text-center py-5">
+                    <h1 class="text-danger"><i class="bi bi-box-arrow-right"></i> Signed Out</h1>
+                    <p class="lead text-muted">You have successfully signed out of the IM System Hub.</p>
+                    <a href="#" class="btn btn-lg btn-success rounded-pill mt-3" onClick="window.location.reload()">Sign In Again</a>
+                </div>
+            `;
+            console.log("User signed out.");
+        }
+
+        // Event listener to run once the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProfileData();
+            document.getElementById('signOutBtn').addEventListener('click', handleSignOut);
+        });
+
+    </script>
+
+    <!-- Footer with Blue Blend Color (Ice Mountain) -->
+    <footer class="ice-mountain-footer mt-10">
+        <div class="container mx-auto text-center">
+            <p class="mb-0">IM System &copy; 2024. All Rights Reserved. Built with <i class="bi bi-heart-fill text-red-500"></i> in Bhutan.</p>
+            <p class="text-sm opacity-80 mt-1">Staff ID: <span id="footerStaffId">Loading...</span></p>
+        </div>
+    </footer>
+
+</div>
+
+</body>
+</html>
