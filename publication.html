@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publication Management</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <style>
+.body {
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.card {
+    border-radius: 12px;
+}
+
+.card-header {
+    font-weight: bold;
+}
+.inv-card {
+    border-radius: 10px;
+}
+
+  /* New Footer */
+        .ice-mountain-footer {
+            /* Subtle blue gradient representing ice and sky */
+            background: linear-gradient(90deg, #31cde1, #3486eb, #2065dc); /* Light cyan to cooler blue */
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem 1rem;
+            color: #f2f3f3; /* Deep blue text color */
+            font-weight: 500;
+        }
+
+        
+    
+        /* Sidebar Styling */
+.sidebar {
+    width: 250px;
+    position: fixed;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+/* Active Nav Item Styling */
+.nav-item.active-link {
+    background-color: #2ECC71;
+    color: white !important;
+    border-radius: 0.5rem;
+}
+
+.nav-item.active-link:hover {
+    background-color: #28a745; /* Slightly darker green on hover for active link */
+    color: white !important;
+}
+
+/* Navigation Link Hover Style */
+.nav-item:hover, .nav-item:focus {
+    background-color: #e9ecef; /* Light grey on hover */
+    color: #2ECC71 !important;
+}
+
+/* Main Content Adjustment for Fixed Sidebar */
+.main-content {
+    margin-left: 250px; /* Offset the main content by the sidebar width */
+    padding-top: 0;
+}
+
+/* Responsive adjustment for small screens (sidebar hidden) */
+@media (max-width: 992px) {
+    .sidebar {
+        display: none;
+    }
+    .main-content {
+        margin-left: 0;
+    }
+}
+
+/* Custom Green Color based on screenshot */
+.im-green-bg {
+    background-color: #2ECC71 !important;
+}
+
+
+    </style>
+</head>
+
+
+    <!-- 1. LEFT SIDEBAR (NAV BAR) -->
+    <aside class="sidebar bg-white shadow-lg border-end">
+
+        <!-- Sidebar Header: IM System Title Block (Green) -->
+        <div class="im-green-bg text-white p-4 rounded-bottom-4 mb-4">
+            <h1 class="h3 fw-bold mb-0">IM System</h1>
+            <p class="small opacity-75 mb-0">Information Management</p>
+        </div>
+
+        <!-- User/Profile Info -->
+        <div class="px-4 pb-3 border-bottom">
+            <p class="text-uppercase text-muted fw-semibold small mb-1">USER</p>
+            <div class="text-dark fw-bold h5 mb-0">Tashi Wangchuk</div>
+            <div class="small text-secondary">Operations Manager</div>
+        </div>
+
+        <!-- Navigation Links -->
+        <nav class="p-3">
+            <ul class="list-group list-group-flush border-0">
+                
+                <!-- 1. Home (Active Link) -->
+                <li class="list-group-item border-0 p-0 mb-2">
+                    <a href="home.html" class="nav-item active-link d-flex align-items-center p-3 fw-medium text-decoration-none">
+                        <i class="bi bi-house-door-fill me-3 fs-5"></i>
+                        <span>Home</span>
+                    </a>
+                </li>
+
+                <!-- 2. Profile -->
+                <li class="list-group-item border-0 p-0 mb-2">
+                    <a href="profile.html" class="nav-item d-flex align-items-center p-3 text-secondary text-decoration-none rounded-3">
+                        <i class="bi bi-person me-3 fs-5"></i>
+                        <span>Profile</span>
+                    </a>
+                </li>
+                
+                <!-- 3. Publication -->
+                <li class="list-group-item border-0 p-0 mb-2">
+                    <a href="Publication.html" class="nav-item d-flex align-items-center p-3 text-secondary text-decoration-none rounded-3">
+                        <i class="bi bi-book me-3 fs-5"></i>
+                        <span>Publication</span>
+                    </a>
+                </li>
+
+                <!-- 4. Inventory & Property -->
+                <li class="list-group-item border-0 p-0 mb-2">
+                    <a href="Inventory.html" class="nav-item d-flex align-items-center p-3 text-secondary text-decoration-none rounded-3">
+                        <i class="bi bi-box-seam me-3 fs-5"></i>
+                        <span>Inventory & Property</span>
+                    </a>
+                </li>
+                
+                <!-- 5. Staff Tasks & Tours -->
+                <li class="list-group-item border-0 p-0 mb-2">
+                    <a href="Staff Task and Tour.html" class="nav-item d-flex align-items-center p-3 text-secondary text-decoration-none rounded-3">
+                        <i class="bi bi-card-checklist me-3 fs-5"></i>
+                        <span>Staff Tasks & Tours</span>
+                    </a>
+                </li>
+                
+                <!-- 6. Leave Application -->
+                <li class="list-group-item border-0 p-0 mb-2">
+                    <a href="Leave Application Form.html" class="nav-item d-flex align-items-center p-3 text-secondary text-decoration-none rounded-3">
+                        <i class="bi bi-calendar-minus me-3 fs-5"></i>
+                        <span>Leave Application</span>
+                    </a>
+                </li>
+                
+                <!-- 7. Promotion and Resignation -->
+                <li class="list-group-item border-0 p-0 mb-2">
+                    <a href="promotion and resignation.html" class="nav-item d-flex align-items-center p-3 text-secondary text-decoration-none rounded-3">
+                        <i class="bi bi-person-up me-3 fs-5"></i>
+                        <span>Promotion and Resignation</span>
+                    </a>
+                </li>
+                
+                <!-- 8. Human Resource and Help -->
+                <li class="list-group-item border-0 p-0 mb-2">
+                    <a href="Human Resouce and Help.html" class="nav-item d-flex align-items-center p-3 text-secondary text-decoration-none rounded-3">
+                        <i class="bi bi-person-workspace me-3 fs-5"></i>
+                        <span>Human Resource and Help</span>
+                    </a>
+                </li>
+                
+                <!-- 9. Notification and Company Calendar -->
+                <li class="list-group-item border-0 p-0 mb-2">
+                    <a href="Notification and Company Calender.html" class="nav-item d-flex align-items-center p-3 text-secondary text-decoration-none rounded-3">
+                        <i class="bi bi-bell-fill me-3 fs-5"></i>
+                        <span>Notification and Company Calendar</span>
+                    </a>
+                </li>
+                
+                <!-- 10. Rules and Regulations -->
+                <li class="list-group-item border-0 p-0 mb-2">
+                    <a href="Rules and Regulations.html" class="nav-item d-flex align-items-center p-3 text-secondary text-decoration-none rounded-3">
+                        <i class="bi bi-rulers me-3 fs-5"></i>
+                        <span>Rules and Regulations</span>
+                    </a>
+                </li>
+                
+                <!-- 11. Change password -->
+                <li class="list-group-item border-0 p-0 mb-2">
+                    <a href="Change Password.html" class="nav-item d-flex align-items-center p-3 text-secondary text-decoration-none rounded-3">
+                        <i class="bi bi-shield-lock-fill me-3 fs-5"></i>
+                        <span>Change password</span>
+                    </a>
+                </li>
+                
+            </ul>
+        </nav>
+    </aside>
+
+
+    <div class="main-content">
+
+<body class="bg-light">
+
+    <!-- Header -->
+    <nav class="navbar navbar-dark bg-primary px-3">
+        <span class="navbar-brand mb-0 h1">Company Information System</span>
+    </nav>
+
+    <div class="container py-4">
+        <h2 class="mb-1">Publication Management</h2>
+        <p class="text-muted">Manage company announcements, documents, and notices.</p>
+
+        <!-- Description -->
+        <div class="alert alert-info">
+            This module allows staff to publish internal notices, company updates,
+            announcements, and documentation for employees.
+        </div>
+
+        <!-- Add New Publication Form -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-secondary text-white">Add New Publication</div>
+            <div class="card-body">
+                <form id="pubForm">
+                    <div class="mb-3">
+                        <label class="form-label">Publication Title</label>
+                        <input type="text" id="pubTitle" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Category</label>
+                        <select id="pubCategory" class="form-select" required>
+                            <option>Notice</option>
+                            <option>Announcement</option>
+                            <option>Policy</option>
+                            <option>Report</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea id="pubDesc" class="form-control" rows="3" required></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Upload Document (optional)</label>
+                        <input type="file" id="pubFile" class="form-control">
+                    </div>
+
+                    <button class="btn btn-primary w-100">Publish</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Existing Publications -->
+        <h4 class="mb-3">Existing Publications</h4>
+
+        <div class="row" id="pubList">
+
+            <!-- Default Cards Already Included -->
+            <!-- Card 1 -->
+            <div class="col-md-6 mb-3">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Annual Performance Review Guidelines</h5>
+                        <span class="badge bg-info mb-2">Report</span>
+                        <p class="card-text">Guidelines for evaluating annual employee performance.</p>
+                        <button class="btn btn-outline-primary btn-sm">View</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="col-md-6 mb-3">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">New HR Policies – 2025 Update</h5>
+                        <span class="badge bg-warning mb-2">Policy</span>
+                        <p class="card-text">Updated HR guidelines and employee rules for 2025.</p>
+                        <button class="btn btn-outline-primary btn-sm">View</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="col-md-6 mb-3">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Office Maintenance Notice</h5>
+                        <span class="badge bg-danger mb-2">Notice</span>
+                        <p class="card-text">Maintenance schedule for office facilities.</p>
+                        <button class="btn btn-outline-primary btn-sm">View</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="col-md-6 mb-3">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Holiday Schedule Announcement</h5>
+                        <span class="badge bg-success mb-2">Announcement</span>
+                        <p class="card-text">Official company holidays for the upcoming year.</p>
+                        <button class="btn btn-outline-primary btn-sm">View</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+
+    /* ================================
+       PUBLICATION MANAGEMENT (CARDS)
+    ================================== */
+    const pubForm = document.getElementById("pubForm");
+    const pubList = document.getElementById("pubList"); // Container for publication cards
+
+    if (pubForm && pubList) {
+        pubForm.addEventListener("submit", e => {
+            e.preventDefault();
+
+            const title = document.getElementById("pubTitle").value;
+            const category = document.getElementById("pubCategory").value;
+            const desc = document.getElementById("pubDesc").value;
+            const date = new Date().toISOString().split("T")[0];
+
+            const card = document.createElement("div");
+            card.className = "col-md-6 mb-3";
+            card.innerHTML = `
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">${title}</h5>
+                        <span class="badge bg-primary mb-2">${category}</span>
+                        <p class="card-text">${desc}</p>
+                        <p class="text-muted small">Date: ${date}</p>
+                        <button class="btn btn-outline-primary btn-sm">View</button>
+                    </div>
+                </div>
+            `;
+
+            pubList.appendChild(card);
+            pubForm.reset();
+        });
+    }
+});
+
+    </script>
+
+    
+ <!-- Footer with Blue Blend Color (Ice Mountain) -->
+    <footer class="ice-mountain-footer mt-10">
+        <div class="container mx-auto text-center">
+            <p class="mb-0">IM System &copy; 2024. All Rights Reserved. Built with <i class="bi bi-heart-fill text-red-500"></i> in Bhutan.</p>
+            <p class="text-sm opacity-80 mt-1">Staff ID: <span id="footerStaffId">Loading...</span></p>
+        </div>
+    </footer>
+</div>
+</body>
+</html>
