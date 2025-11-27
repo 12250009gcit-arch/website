@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Rules and Regulations</title>
+    <style>
+        /* General Setup */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f9;
+            margin: 0;
+            padding: 0; /* Remove body padding as container now handles centering */
+            display: flex;
+            /* The main structure is body > aside + .wrapper, so we remove the centering from body */
+            min-height: 100vh;
+        }
+
+        /* --- Sidebar Styling (Fixed & Replaced Utility Classes) --- */
+        .sidebar {
+            width: 250px;
+            position: fixed;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            overflow-y: auto;
+            z-index: 1000;
+            background-color: white; /* bg-white */
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1); /* shadow-lg and border-end */
+            border-right: 1px solid #e0e0e0; /* border-end refinement */
+        }
+
+        /* Custom Green Color Block (IM System Title) */
+        .im-green-bg {
+            background-color: #2ECC71 !important;
+            color: white; /* text-white */
+            padding: 1.5rem 1rem; /* p-4 */
+            border-bottom-left-radius: 0.5rem; /* rounded-bottom-4 (approx) */
+            border-bottom-right-radius: 0.5rem; /* rounded-bottom-4 (approx) */
+            margin-bottom: 1rem; /* mb-4 */
+        }
+
+        .im-green-bg h1 {
+            margin: 0;
+            font-size: 1.5rem; /* h3 fw-bold */
+            font-weight: bold;
+        }
+        
+        .im-green-bg p {
+            margin: 0;
+            font-size: 0.875rem; /* small opacity-75 */
+            opacity: 0.75;
+        }
+
+        /* User/Profile Info */
+        .profile-info {
+            padding: 0 1rem 0.75rem 1rem; /* px-4 pb-3 */
+            border-bottom: 1px solid #e0e0e0; /* border-bottom */
+        }
+
+        .profile-info .label {
+            text-transform: uppercase; /* text-uppercase */
+            color: #6c757d; /* text-muted */
+            font-weight: 600; /* fw-semibold */
+            font-size: 0.75rem; /* small */
+            margin-bottom: 0.25rem; /* mb-1 */
+        }
+
+        .profile-info .name {
+            color: #212529; /* text-dark */
+            font-weight: bold; /* fw-bold */
+            font-size: 1.25rem; /* h5 */
+            margin-bottom: 0; /* mb-0 */
+        }
+
+        .profile-info .role {
+            font-size: 0.875rem; /* small */
+            color: #6c757d; /* text-secondary */
+        }
+
+        /* Navigation List Reset */
+        .nav-list {
+            list-style: none; /* list-group list-group-flush */
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-item-wrapper {
+            border: 0; /* list-group-item border-0 */
+            padding: 0; /* p-0 */
+            margin-bottom: 0.5rem; /* mb-2 */
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center; /* d-flex align-items-center */
+            padding: 0.75rem; /* p-3 */
+            font-weight: 500; /* fw-medium */
+            text-decoration: none; /* text-decoration-none */
+            color: #6c757d; /* text-secondary */
+            border-radius: 0.3rem; /* rounded-3 */
+            transition: background-color 0.15s, color 0.15s;
+            width: 100%; /* Important for full hover area */
+            box-sizing: border-box;
+        }
+
+        .nav-item i {
+            margin-right: 0.75rem; /* me-3 */
+            font-size: 1.25rem; /* fs-5 */
+        }
+
+        /* Active Nav Item Styling */
+        .nav-item.active-link {
+            background-color: #2ECC71;
+            color: white !important;
+            border-radius: 0.5rem;
+        }
+
+        .nav-item.active-link:hover {
+            background-color: #28a745; /* Slightly darker green on hover for active link */
+            color: white !important;
+        }
+
+        /* Navigation Link Hover Style */
+        .nav-item:hover, .nav-item:focus {
+            background-color: #e9ecef; /* Light grey on hover */
+            color: #2ECC71 !important;
+        }
+        
+        /* Main Wrapper for Content and Footer */
+        .content-wrapper {
+            flex-grow: 1; /* Allows it to take up remaining space */
+            margin-left: 250px; /* Offset the main content by the sidebar width */
+            padding-top: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* The container for the main rules content (inside the content-wrapper) */
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin: 20px auto; /* Center the container horizontally and add top/bottom margin */
+        }
+
+        /* Header */
+        .header {
+            background-color: #1a4f8d; /* Deep Blue */
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.2em;
+        }
+
+        .header p {
+            margin-top: 8px;
+            font-size: 1em;
+            color: #ccc;
+        }
+        
+        /* Main Content Area (inside the container) */
+        .rules-content {
+            padding: 30px;
+        }
+
+        /* Section Titles */
+        .section-title {
+            font-size: 1.6em;
+            font-weight: bold;
+            color: #1a4f8d;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        /* Card Styles */
+        .card {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        /* Accordion (Details/Summary) Styles */
+        .policy-group {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            overflow: hidden;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .policy-group summary {
+            display: block; /* Fixes safari issue */
+            padding: 18px 20px;
+            background-color: #f9f9f9;
+            color: #1a4f8d;
+            font-weight: bold;
+            font-size: 1.1em;
+            cursor: pointer;
+            border-bottom: 1px solid #ddd;
+            transition: background-color 0.2s;
+        }
+
+        .policy-group summary:hover {
+            background-color: #eef4f9;
+        }
+        
+        .policy-group[open] summary {
+            background-color: #1a4f8d;
+            color: white;
+            border-bottom: none;
+        }
+
+        /* New Footer */
+        .ice-mountain-footer {
+            /* Subtle blue gradient representing ice and sky */
+            background: linear-gradient(90deg, #31cde1, #3486eb, #2065dc); /* Light cyan to cooler blue */
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem 1rem;
+            color: white; /* Changed from #f2f3f3 to white for better contrast */
+            font-weight: 500;
+            margin-top: 2.5rem; /* mt-10 (approx) */
+        }
+        
+        .footer-content {
+            max-width: 900px; /* container mx-auto */
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center; /* text-center */
+        }
+
+        .ice-mountain-footer p {
+            margin-bottom: 0;
+            font-size: 1em;
+        }
+
+        .ice-mountain-footer .small-text {
+            font-size: 0.875em; /* text-sm */
+            opacity: 0.8; /* opacity-80 */
+            margin-top: 0.25rem; /* mt-1 */
+        }
+        
+        .policy-content {
+            padding: 20px;
+            background-color: white;
+        }
+
+        .policy-content h3 {
+            color: #333;
+            font-size: 1.3em;
+            margin-top: 0;
+            margin-bottom: 15px;
+            border-left: 4px solid #f0ad4e; /* Orange accent */
+            padding-left: 10px;
+        }
+
+        .policy-content ul {
+            list-style: disc;
+            padding-left: 40px; /* Increased from 20px to account for list-style-disc positioning */
+            margin: 15px 0;
+            line-height: 1.6;
+        }
+        
+        .policy-content p {
+            line-height: 1.6;
+            color: #555;
+            margin-bottom: 15px;
+        }
+        
+        /* Footer/Reference */
+        .reference-box {
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 992px) {
+            .sidebar {
+                display: none;
+            }
+            .content-wrapper {
+                margin-left: 0;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .header {
+                padding: 20px 15px;
+            }
+            .rules-content {
+                padding: 20px;
+            }
+            .policy-group summary {
+                font-size: 1em;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+
+        <div class="im-green-bg">
+            <h1>IM System</h1>
+            <p>Information Management</p>
+        </div>
+
+        <div class="profile-info">
+            <p class="label">USER</p>
+            <div class="name">Tashi Wangchuk</div>
+            <div class="role">Operations Manager</div>
+        </div>
+
+        <nav class="p-3">
+            <ul class="nav-list">
+                
+                <li class="nav-item-wrapper">
+                    <a href="home.html" class="nav-item active-link">
+                        <i class="bi bi-house-door-fill"></i>
+                        <span>Home</span>
+                    </a>
+                </li>
+
+                <li class="nav-item-wrapper">
+                    <a href="profile.html" class="nav-item">
+                        <i class="bi bi-person"></i>
+                        <span>Profile</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item-wrapper">
+                    <a href="Publication.html" class="nav-item">
+                        <i class="bi bi-book"></i>
+                        <span>Publication</span>
+                    </a>
+                </li>
+
+                <li class="nav-item-wrapper">
+                    <a href="Inventory.html" class="nav-item">
+                        <i class="bi bi-box-seam"></i>
+                        <span>Inventory & Property</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item-wrapper">
+                    <a href="Staff Task and Tour.html" class="nav-item">
+                        <i class="bi bi-card-checklist"></i>
+                        <span>Staff Tasks & Tours</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item-wrapper">
+                    <a href="Leave Application Form.html" class="nav-item">
+                        <i class="bi bi-calendar-minus"></i>
+                        <span>Leave Application</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item-wrapper">
+                    <a href="promotion and resignation.html" class="nav-item">
+                        <i class="bi bi-person-up"></i>
+                        <span>Promotion and Resignation</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item-wrapper">
+                    <a href="Human Resouce and Help.html" class="nav-item">
+                        <i class="bi bi-person-workspace"></i>
+                        <span>Human Resource and Help</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item-wrapper">
+                    <a href="Notification and Company Calender.html" class="nav-item">
+                        <i class="bi bi-bell-fill"></i>
+                        <span>Notification and Company Calendar</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item-wrapper">
+                    <a href="Rules and Regulations.html" class="nav-item">
+                        <i class="bi bi-rulers"></i>
+                        <span>Rules and Regulations</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item-wrapper">
+                    <a href="Change Password.html" class="nav-item">
+                        <i class="bi bi-shield-lock-fill"></i>
+                        <span>Change password</span>
+                    </a>
+                </li>
+                
+            </ul>
+        </nav>
+    </aside>
+
+    <div class="content-wrapper">
+
+        <div class="container">
+            
+            <div class="header">
+                <h1>Rules & Regulations</h1>
+                <p>The foundation for a productive, safe, and respectful workplace.</p>
+            </div>
+
+            <div class="rules-content">
+
+                <h2 class="section-title">Essential Company Policies Handbook (2025)</h2>
+
+                <div class="card">
+                    
+                    <details class="policy-group" open>
+                        <summary>🤝 Workplace Conduct & Ethics</summary>
+                        <div class="policy-content">
+                            <h3>Non-Discrimination Policy</h3>
+                            <p>The Company is committed to providing a work environment free of discrimination and harassment. All employees are expected to treat colleagues, clients, and partners with respect and dignity, regardless of background or status.</p>
+                            <ul>
+                                <li>Zero tolerance for harassment or bullying.</li>
+                                <li>Prompt and confidential investigation of all reported conduct violations.</li>
+                            </ul>
+                            
+                            <h3>Attendance and Punctuality</h3>
+                            <p>Reliable attendance is essential for operations. Employees must adhere to their scheduled working hours and communicate any absence or delay to their manager immediately.</p>
+                            <ul>
+                                <li>Scheduled working hours: 9:00 AM to 5:00 PM, Monday to Friday.</li>
+                                <li>Formal request required for any planned time off (minimum 2 weeks' notice).</li>
+                            </ul>
+                        </div>
+                    </details>
+                    
+                    <details class="policy-group">
+                        <summary>🔒 Information Security & Privacy</summary>
+                        <div class="policy-content">
+                            <h3>Data Handling and Confidentiality</h3>
+                            <p>All sensitive company and client information must be handled according to strict confidentiality protocols. Employees are prohibited from sharing proprietary information outside of the designated need-to-know scope.</p>
+                            <ul>
+                                <li>Do not use personal email for company business.</li>
+                                <li>Always use strong, unique passwords and enable two-factor authentication.</li>
+                            </ul>
+
+                            <h3>Device Usage</h3>
+                            <p>Company-issued devices must be used primarily for work purposes and adhere to all IT security settings.</p>
+                            <ul>
+                                <li>Personal software installations are strictly prohibited without IT approval.</li>
+                                <li>Do not leave devices unattended in public areas.</li>
+                            </ul>
+                        </div>
+                    </details>
+
+                    <details class="policy-group">
+                        <summary>💰 Financial & Expense Reporting</summary>
+                        <div class="policy-content">
+                            <h3>Travel and Expense Policy</h3>
+                            <p>Expenses must be reasonable, necessary, and documented with valid receipts. All submissions must comply with the quarterly deadline (see calendar).</p>
+                            <ul>
+                                <li>Receipts required for all items over \$25.</li>
+                                <li>Air travel should be booked economy class unless explicitly approved by a department head.</li>
+                            </ul>
+
+                            <h3>Conflict of Interest</h3>
+                            <p>Employees must avoid any personal or financial activity that could conflict with the company's best interests. Disclose potential conflicts to HR immediately.</p>
+                        </div>
+                    </details>
+                    
+                </div>
+
+                <div class="reference-box">
+                    <p>For the complete, legally binding document, please refer to the latest version on the HR portal (version 4.1, dated 01/01/2025).</p>
+                </div>
+                
+            </div>
+        </div>
+
+        
+    <footer class="ice-mountain-footer">
+            <div class="footer-content">
+                <p>IM System &copy; 2024. All Rights Reserved. Built with <i class="bi bi-heart-fill"></i> in Bhutan.</p>
+                <p class="small-text">Staff ID: <span id="footerStaffId">Loading...</span></p>
+            </div>
+        </footer>
+    </div>
+
+</body>
+</html>
