@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Leave Application</title>
+    <!-- Use Inter font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <!-- Bootstrap Icons for the sidebar (used in the original) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+    <style>
+        /* General Setup */
+        :root {
+            --primary-blue: #2c9aff;
+            --dark-navy: #0b1a2f;
+            --im-green: #2ECC71;
+            --gray-100: #f3f4f6;
+            --gray-300: #d1d5db;
+            --gray-500: #6b7280;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--gray-100);
+            min-height: 100vh;
+            display: flex;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Utility Colors from Original Custom CSS */
+        .primary-blue { background-color: var(--primary-blue); }
+        .text-primary-blue { color: var(--primary-blue); }
+        .border-primary-blue { border-color: var(--primary-blue); }
+        .dark-navy { background-color: var(--dark-navy); }
+        .im-green-bg { background-color: var(--im-green) !important; }
+        .text-white { color: var(--white); }
+
+        /* 1. Sidebar Styling */
+        .sidebar {
+            width: 250px;
+            position: fixed;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            overflow-y: auto;
+            z-index: 1000;
+            background-color: var(--white);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05); /* shadow-lg */
+            border-right: 1px solid var(--gray-300); /* border-end */
+        }
+
+        .sidebar-header {
+            padding: 1rem; /* p-4 */
+            margin-bottom: 1rem; /* mb-4 */
+            border-bottom-left-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+        }
+        
+        .user-info-block {
+            padding: 0 1rem 0.75rem 1rem; /* px-4 pb-3 */
+            margin-bottom: 0.75rem; /* Separator spacing */
+            border-bottom: 1px solid #e5e7eb; /* border-bottom */
+        }
+        
+        .user-info-block .small { font-size: 0.875rem; color: var(--gray-500); }
+        .user-info-block .h5 { font-size: 1.25rem; font-weight: 700; margin: 0; }
+        .text-uppercase { text-transform: uppercase; color: var(--gray-500); font-weight: 600; font-size: 0.75rem; margin-bottom: 0.25rem; }
+
+        .nav-wrapper { padding: 0.75rem; } /* p-3 */
+        .nav-list { list-style: none; padding: 0; margin: 0; }
+        .list-item-wrapper { margin-bottom: 0.5rem; } /* mb-2 */
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem; /* p-3 */
+            font-weight: 500;
+            text-decoration: none;
+            color: var(--gray-500); /* text-secondary */
+            border-radius: 0.5rem;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .nav-item i { margin-right: 0.75rem; font-size: 1.25rem; } /* me-3 fs-5 */
+
+        .nav-item.active-link {
+            background-color: var(--im-green);
+            color: var(--white) !important;
+        }
+
+        .nav-item:hover, .nav-item:focus {
+            background-color: #e5e7eb; /* Light gray hover */
+            color: var(--im-green) !important;
+        }
+
+        /* 2. Main Content Layout */
+        .main-content {
+            flex-grow: 1;
+            margin-left: 250px; /* Offset the main content by the sidebar width */
+            padding: 2.5rem; /* General padding */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: calc(100% - 250px);
+        }
+
+        .leave-card {
+            width: 100%; /* w-full */
+            max-width: 96rem; /* max-w-4xl (approx 800px) */
+            background-color: var(--white);
+            border-radius: 1rem; /* rounded-2xl */
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); /* shadow-2xl */
+            overflow: hidden;
+            display: flex;
+            flex-direction: column; /* Default stack on mobile */
+        }
+
+        /* Left Panel (Dark Theme) */
+        .left-panel {
+            background-color: var(--dark-navy);
+            color: var(--white);
+            padding: 2rem; /* p-8 */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 100%; /* Default mobile width */
+        }
+        
+        .panel-title { font-size: 1.875rem; font-weight: 800; margin-bottom: 1rem; } /* text-3xl font-extrabold mb-4 */
+        .panel-text { color: #ccc; font-size: 0.875rem; } /* text-gray-300 text-sm */
+
+        .quick-info-block {
+            margin-top: 2rem; /* mt-8 */
+            padding-top: 1.5rem; /* pt-6 */
+            border-top: 1px solid rgba(255, 255, 255, 0.1); /* border-t border-gray-700/50 */
+        }
+        .quick-info-title { font-size: 1.125rem; font-weight: 600; color: var(--primary-blue); margin-bottom: 0.5rem; } /* text-lg font-semibold text-primary-blue */
+        .info-list { list-style: none; padding: 0; margin-top: 0.5rem; font-size: 0.875rem; color: #aaa; }
+        .info-list li { margin-bottom: 0.5rem; }
+
+        /* Right Form Section (Light Theme) */
+        .right-form-panel {
+            padding: 1.5rem; /* p-6 */
+            width: 100%; /* Default mobile width */
+            max-height: 100vh; /* max-h-screen */
+            overflow-y: auto;
+        }
+
+        .form-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gray-800);
+            margin-bottom: 1.5rem; /* mb-6 */
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 0.75rem; /* pb-3 */
+        }
+
+        /* Form Controls */
+        .form-group-spacing > div { margin-bottom: 1.5rem; } /* space-y-6 equivalent */
+        .form-group-spacing { margin-bottom: 1.5rem; }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--gray-700);
+            margin-bottom: 0.25rem; /* mb-1 */
+        }
+
+        .form-input-readonly {
+            width: 100%;
+            padding: 0.75rem; /* p-3 */
+            border: 1px solid var(--gray-300);
+            border-radius: 0.75rem; /* rounded-xl */
+            background-color: #f9fafb; /* bg-gray-50 */
+            outline: none;
+            color: var(--gray-500); /* text-gray-600 */
+        }
+        
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.75rem; /* p-3 */
+            border: 1px solid var(--gray-300);
+            border-radius: 0.75rem; /* rounded-xl */
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        /* Input focus styles */
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 1px var(--primary-blue);
+            outline: none;
+        }
+
+        /* Grid Layout */
+        .grid-2-cols {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem; /* gap-4 */
+        }
+        
+        /* Approval Status */
+        .status-message {
+            padding: 0.75rem;
+            border-radius: 0.75rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .status-pending { background-color: #fffbeb; border: 1px solid #fde68a; color: #b45309; } /* yellow-50, yellow-300, yellow-800 */
+        .status-submitting { background-color: #eff6ff; border: 1px solid #93c5fd; color: #1e40af; } /* blue-50, blue-300, blue-800 */
+        .status-success { background-color: #f0fdf4; border: 1px solid #bbf7d0; color: #15803d; } /* green-50, green-300, green-800 */
+
+        /* Action Buttons */
+        .form-actions {
+            display: flex;
+            flex-direction: column; /* Default stack on mobile */
+            justify-content: flex-end;
+            margin-top: 1rem;
+            padding-top: 1rem; /* pt-4 */
+        }
+
+        .form-actions button {
+            padding: 0.75rem 1.5rem; /* px-6 py-3 */
+            border-radius: 0.75rem; /* rounded-xl */
+            font-weight: 600;
+            transition: background-color 0.2s, box-shadow 0.2s;
+        }
+        
+        .btn-secondary {
+            border: 1px solid var(--gray-300);
+            color: var(--gray-700);
+            background-color: var(--white);
+            margin-bottom: 0.75rem; /* space-y-3 */
+        }
+        .btn-secondary:hover { background-color: #f9fafb; } /* hover:bg-gray-100 */
+
+        .btn-primary {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            box-shadow: 0 4px 6px -1px rgba(44, 154, 255, 0.3), 0 2px 4px -2px rgba(44, 154, 255, 0.3); /* shadow-lg shadow-blue-400/50 */
+        }
+        .btn-primary:hover { opacity: 0.9; } /* hover:bg-opacity-90 */
+
+        /* Footer Styling */
+        .ice-mountain-footer {
+            margin-top: 2.5rem; /* mt-10 */
+            background: linear-gradient(90deg, #31cde1, #3486eb, #2065dc);
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem 1rem;
+            color: #f2f3f3;
+            font-weight: 500;
+            width: 100%;
+        }
+        .footer-content {
+            max-width: 96rem;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+        }
+        .footer-content .text-sm { font-size: 0.875rem; opacity: 0.8; margin-top: 0.25rem; }
+        .footer-content .bi-heart-fill { color: #ef4444; } /* text-red-500 */
+
+
+        /* Custom scrollbar for a cleaner look (Kept from original) */
+        .scrollable-content::-webkit-scrollbar { width: 8px; }
+        .scrollable-content::-webkit-scrollbar-thumb { background-color: rgba(44, 154, 255, 0.5); border-radius: 10px; }
+        .scrollable-content::-webkit-scrollbar-track { background: #f0f2f5; }
+
+        /* Media Queries for Responsiveness */
+        @media (min-width: 640px) { /* sm breakpoint */
+            .right-form-panel { padding: 2.5rem; } /* sm:p-10 */
+            .grid-2-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); } /* sm:grid-cols-2 */
+            .form-actions { flex-direction: row; align-items: center; } /* sm:flex-row */
+            .btn-secondary { margin-bottom: 0; margin-right: 1rem; }
+            .form-actions button:first-child { margin-right: 1rem; }
+        }
+
+        @media (min-width: 768px) { /* md breakpoint */
+            .leave-card { flex-direction: row; } /* md:flex */
+            .left-panel { width: 33.333333%; padding: 2.5rem; } /* md:w-1/3 md:p-10 */
+            .right-form-panel { width: 66.666667%; } /* md:w-2/3 */
+            .quick-info-block { margin-top: 0; border-top: none; padding-top: 0; }
+        }
+
+        @media (max-width: 992px) { /* Sidebar hidden on smaller screens */
+            .sidebar { display: none; }
+            .main-content { margin-left: 0; width: 100%; padding: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- 1. LEFT SIDEBAR (NAV BAR) -->
+    <aside class="sidebar">
+
+        <!-- Sidebar Header: IM System Title Block (Green) -->
+        <div class="im-green-bg text-white sidebar-header">
+            <h1 style="font-size: 1.5rem; font-weight: 700; margin: 0;">IM System</h1>
+            <p style="font-size: 0.875rem; opacity: 0.8; margin: 0;">Information Management</p>
+        </div>
+
+        <!-- User/Profile Info -->
+        <div class="user-info-block">
+            <p class="text-uppercase">USER</p>
+            <div class="h5" style="color: #1f2937;">Tashi Wangchuk</div>
+            <div class="small">Operations Manager</div>
+        </div>
+
+        <!-- Navigation Links -->
+        <nav class="nav-wrapper">
+            <ul class="nav-list">
+                
+                <!-- 1. Home (Active Link) -->
+                <li class="list-item-wrapper">
+                    <a href="home.html" class="nav-item active-link">
+                        <i class="bi bi-house-door-fill"></i>
+                        <span>Home</span>
+                    </a>
+                </li>
+
+                <!-- 2. Profile -->
+                <li class="list-item-wrapper">
+                    <a href="profile.html" class="nav-item">
+                        <i class="bi bi-person"></i>
+                        <span>Profile</span>
+                    </a>
+                </li>
+                
+                <!-- 3. Publication -->
+                <li class="list-item-wrapper">
+                    <a href="Publication.html" class="nav-item">
+                        <i class="bi bi-book"></i>
+                        <span>Publication</span>
+                    </a>
+                </li>
+
+                <!-- 4. Inventory & Property -->
+                <li class="list-item-wrapper">
+                    <a href="Inventory.html" class="nav-item">
+                        <i class="bi bi-box-seam"></i>
+                        <span>Inventory & Property</span>
+                    </a>
+                </li>
+                
+                <!-- 5. Staff Tasks & Tours -->
+                <li class="list-item-wrapper">
+                    <a href="Staff Task and Tour.html" class="nav-item">
+                        <i class="bi bi-card-checklist"></i>
+                        <span>Staff Tasks & Tours</span>
+                    </a>
+                </li>
+                
+                <!-- 6. Leave Application -->
+                <li class="list-item-wrapper">
+                    <a href="Leave Application Form.html" class="nav-item">
+                        <i class="bi bi-calendar-minus"></i>
+                        <span>Leave Application</span>
+                    </a>
+                </li>
+                
+                <!-- 7. Promotion and Resignation -->
+                <li class="list-item-wrapper">
+                    <a href="promotion and resignation.html" class="nav-item">
+                        <i class="bi bi-person-up"></i>
+                        <span>Promotion and Resignation</span>
+                    </a>
+                </li>
+                
+                <!-- 8. Human Resource and Help -->
+                <li class="list-item-wrapper">
+                    <a href="Human Resouce and Help.html" class="nav-item">
+                        <i class="bi bi-person-workspace"></i>
+                        <span>Human Resource and Help</span>
+                    </a>
+                </li>
+                
+                <!-- 9. Notification and Company Calendar -->
+                <li class="list-item-wrapper">
+                    <a href="Notification and Company Calender.html" class="nav-item">
+                        <i class="bi bi-bell-fill"></i>
+                        <span>Notification and Company Calendar</span>
+                    </a>
+                </li>
+                
+                <!-- 10. Rules and Regulations -->
+                <li class="list-item-wrapper">
+                    <a href="Rules and Regulations.html" class="nav-item">
+                        <i class="bi bi-rulers"></i>
+                        <span>Rules and Regulations</span>
+                    </a>
+                </li>
+                
+                <!-- 11. Change password -->
+                <li class="list-item-wrapper">
+                    <a href="Change Password.html" class="nav-item">
+                        <i class="bi bi-shield-lock-fill"></i>
+                        <span>Change password</span>
+                    </a>
+                </li>
+                
+            </ul>
+        </nav>
+    </aside>
+
+
+    <div class="main-content">
+
+        <!-- Main Leave Application Card -->
+        <div class="leave-card">
+
+            <!-- Left Header Section (Dark Theme) -->
+            <div class="left-panel">
+                <div>
+                    <h1 class="panel-title">Leave Request</h1>
+                    <p class="panel-text">
+                        Submit your formal application for time off. Please ensure all details are accurate and sufficient notice is provided for smooth processing.
+                    </p>
+                </div>
+                <div class="quick-info-block">
+                    <p class="quick-info-title">Quick Info</p>
+                    <ul class="info-list">
+                        <li><span style="font-weight: 700;">Annual Leave:</span> 15 days available</li>
+                        <li><span style="font-weight: 700;">Sick Leave:</span> 5 days available</li>
+                        <li><span style="font-weight: 700;">Last Request:</span> 2 months ago</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Right Form Section (Light Theme) -->
+            <div class="right-form-panel scrollable-content">
+                <h2 class="form-title">Application Details</h2>
+                
+                <form id="leaveForm" class="form-group-spacing">
+
+                    <!-- Employee Information -->
+                    <div class="grid-2-cols">
+                        <div>
+                            <label for="employeeName" class="form-label">Employee Name</label>
+                            <input type="text" id="employeeName" name="employeeName" value="Alex Smith" readonly class="form-input-readonly">
+                        </div>
+                        <div>
+                            <label for="employeeID" class="form-label">Employee ID</label>
+                            <input type="text" id="employeeID" name="employeeID" value="AF-10025" readonly class="form-input-readonly">
+                        </div>
+                    </div>
+
+                    <!-- Leave Type and Duration -->
+                    <div class="form-group-spacing">
+                        <div>
+                            <label for="leaveType" class="form-label">Type of Leave Requested</label>
+                            <select id="leaveType" name="leaveType" required class="form-select">
+                                <option value="">-- Select Leave Type --</option>
+                                <option value="annual">Annual/Vacation Leave</option>
+                                <option value="sick">Sick Leave</option>
+                                <option value="personal">Personal Leave (Unpaid)</option>
+                                <option value="maternity">Maternity/Paternity Leave</option>
+                            </select>
+                        </div>
+
+                        <div class="grid-2-cols">
+                            <div>
+                                <label for="startDate" class="form-label">Start Date</label>
+                                <input type="date" id="startDate" name="startDate" required class="form-input">
+                            </div>
+                            <div>
+                                <label for="endDate" class="form-label">End Date</label>
+                                <input type="date" id="endDate" name="endDate" required class="form-input">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="totalDays" class="form-label">Total Days Requested</label>
+                            <input type="number" id="totalDays" name="totalDays" placeholder="Automatically calculated..." readonly class="form-input-readonly">
+                        </div>
+                    </div>
+
+                    <!-- Reason and Contact -->
+                    <div class="form-group-spacing">
+                        <div>
+                            <label for="reason" class="form-label">Reason for Leave</label>
+                            <textarea id="reason" name="reason" rows="4" required placeholder="Briefly explain the reason for your time off..." class="form-textarea"></textarea>
+                        </div>
+
+                        <div>
+                            <label for="emergencyContact" class="form-label">Emergency Contact/Delegation</label>
+                            <input type="text" id="emergencyContact" name="emergencyContact" placeholder="Colleague or phone number for urgent matters" class="form-input">
+                        </div>
+                    </div>
+
+                    <!-- Manager Approval (Read-only status placeholder) -->
+                    <div style="padding-top: 1rem;">
+                        <h3 style="font-size: 1.125rem; font-weight: 600; color: var(--gray-800); margin-bottom: 0.5rem;">Approval Status</h3>
+                        <div id="statusMessage" class="status-message status-pending">
+                            Pending Submission
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="form-actions">
+                        <button type="reset" class="btn-secondary">
+                            Cancel/Reset
+                        </button>
+                        <button type="submit" class="btn-primary">
+                            Submit Application
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+        
+    <!-- Footer with Blue Blend Color (Ice Mountain) -->
+        <footer class="ice-mountain-footer">
+            <div class="footer-content">
+                <p style="margin: 0;">IM System &copy; 2024. All Rights Reserved. Built with <i class="bi bi-heart-fill"></i> in Bhutan.</p>
+                <p class="text-sm">Staff ID: <span id="footerStaffId">Loading...</span></p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('leaveForm');
+            const startDateInput = document.getElementById('startDate');
+            const endDateInput = document.getElementById('endDate');
+            const totalDaysInput = document.getElementById('totalDays');
+            const statusMessage = document.getElementById('statusMessage');
+
+            // Function to calculate the difference in days (inclusive, excluding weekends for simplicity)
+            function calculateDays() {
+                const start = new Date(startDateInput.value);
+                const end = new Date(endDateInput.value);
+
+                if (start && end && start <= end) {
+                    let dayCount = 0;
+                    let currentDate = new Date(start); // Use a new Date object for iteration
+                    while (currentDate <= end) {
+                        // Check if it's a weekday (0 = Sunday, 6 = Saturday)
+                        const dayOfWeek = currentDate.getDay();
+                        if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+                            dayCount++;
+                        }
+                        currentDate.setDate(currentDate.getDate() + 1);
+                    }
+                    totalDaysInput.value = dayCount;
+                } else if (startDateInput.value || endDateInput.value) {
+                    totalDaysInput.value = 'Invalid range';
+                } else {
+                    totalDaysInput.value = '';
+                }
+            }
+
+            // Event listeners for date changes
+            startDateInput.addEventListener('change', calculateDays);
+            endDateInput.addEventListener('change', calculateDays);
+            
+            // Submission handler
+            form.addEventListener('submit', (event) => {
+                event.preventDefault();
+                
+                // Simulate form submission process
+                statusMessage.className = 'status-message status-submitting';
+                statusMessage.innerHTML = 'Submitting... Please wait.';
+
+                setTimeout(() => {
+                    const totalDays = totalDaysInput.value;
+                    const leaveType = document.getElementById('leaveType').value;
+
+                    // Display confirmation message 
+                    statusMessage.className = 'status-message status-success';
+                    statusMessage.innerHTML = `Success! Your ${totalDays} day application for ${leaveType} leave has been submitted for approval.`;
+                    
+                    // You would typically send the data to a server here (e.g., using fetch API)
+                    console.log('Form Submitted:', {
+                        leaveType: leaveType,
+                        startDate: startDateInput.value,
+                        endDate: endDateInput.value,
+                        totalDays: totalDays,
+                        reason: document.getElementById('reason').value,
+                        contact: document.getElementById('emergencyContact').value
+                    });
+
+                }, 1500); // Wait 1.5 seconds to simulate network delay
+            });
+            
+            // Initial calculation check on load
+            calculateDays();
+        });
+    </script>
+</body>
+</html>
